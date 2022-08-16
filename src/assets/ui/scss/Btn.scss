@@ -3,7 +3,7 @@
 @mixin btnColor($name, $accent:#fff) {
 	&--#{$name} {
 		--btn-color      : var(--color-#{$name});
-		--btn-color-light: var(--color-#{$name}-10);
+		--btn-color-light: var(--color-#{$name}-15);
 		--btn-text       : #{$accent};
 
 		@media (hover) {
@@ -30,12 +30,12 @@
 	align-items    : center;
 	justify-content: center;
 
-	--size       : 40px;
+	--size       : 42px;
 	height       : var(--size);
 	padding      : 0 calc(var(--size) / 2);
 	border-radius: var(--radius-small);
 
-	font-size  : 14px;
+	font-size  : 16px;
 	font-family: var(--font-base);
 	font-weight: bold;
 
@@ -44,6 +44,10 @@
 
 	// default variant
 	color: var(--btn-color);
+
+	@media(max-width:$xs) {
+		font-size: 12px;
+	}
 
 
 	&:focus:not(:active) {
@@ -73,14 +77,25 @@
 	}
 
 	// size
-	&-large {
-		--size   : 52px;
-		font-size: 16px;
-	}
+	@include AddMedia {
+		&-xlarge {
+			--size: 70px;
+		}
 
-	&-small {
-		--size   : 28px;
-		font-size: 12px;
+		&-large {
+			--size   : 52px;
+			font-size: 18px;
+		}
+
+		&-small {
+			--size   : 36px;
+			font-size: 14px;
+		}
+
+		&-xsmall {
+			--size   : 28px;
+			font-size: 14px;
+		}
 	}
 
 	// color
@@ -121,14 +136,14 @@
 
 
 
-	&:not(&--fill):not(&--light):not(&--contur):not(&--link):not(&--white-bg) {
-		@media(hover) {
-			&:hover {
-				background: var(--btn-color-light);
+	// &:not(&--fill):not(&--light):not(&--contur):not(&--link):not(&--white-bg) {
+	// 	@media(hover) {
+	// 		&:hover {
+	// 			background: var(--btn-color-light);
 
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 
 
 	// variant
@@ -195,9 +210,13 @@
 		}
 	}
 
+	&--underline {
+		border-bottom: 1px solid currentColor;
+	}
+
 	&--white-bg {
-		background: var(--bg3);
-		box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
+		background   : var(--bg3);
+		// box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
 
 		@media(hover) {
 			&:hover {

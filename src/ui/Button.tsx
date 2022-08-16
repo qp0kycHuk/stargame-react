@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 import { UiColors, UiElementSizes } from './types';
 
 interface ButtonProps {
-    children?: typeof React.Children
+    children?: ReactNode
     color?: UiColors
-    variant?: 'fill' | 'light' | 'contur' | 'link' | 'white-bg'
+    variant?: 'fill' | 'light' | 'contur' | 'link' | 'white-bg' | 'none'
     size?: UiElementSizes,
     icon?: Boolean,
     fab?: Boolean,
-    className?: React.ClassAttributes
+    className?: string
 }
 
-export const Button = ({
+export function Button({
     children,
     color = 'primary',
     variant = 'fill',
@@ -20,7 +20,7 @@ export const Button = ({
     fab,
     className,
     ...props
-}: ButtonProps) => {
+}: ButtonProps): ReactElement {
 
 
     const btnClassName = [

@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext, ReactNode } from "react";
 import getCookie from "../service/getCookie";
-import { API_URL } from "./const";
-import { status } from "./status";
-
 
 
 export interface ITheme {
@@ -20,20 +17,28 @@ const themes: ITheme[] = [
 
 
 
-const themeContext = createContext();
+const themeContext = createContext<IThemeProvideValue>({ theme: defaultTheme });
 
-export function ThemeProvider({ children }) {
-	const theme = useProvideTheme();
-	return <themeContext.Provider value={theme} > {children} </themeContext.Provider>;
+interface IProviderProps {
+	children?: ReactNode | ReactNode[]
 }
 
-export const useTheme = () => {
-	return useContext(themeContext);
+export function ThemeProvider({ children }: IProviderProps) {
+	const providedTheme = useProvideTheme();
+	return <themeContext.Provider value={providedTheme} >{children} </themeContext.Provider>;
+}
+
+export const useTheme = (): IThemeProvideValue => {
+	return useContext<IThemeProvideValue>(themeContext);
 };
 
+interface IThemeProvideValue {
+	theme: ITheme
+	setTheme?: Function
+}
 
-function useProvideTheme() {
-	const [theme, setTheme] = useState<ITheme>();
+function useProvideTheme(): IThemeProvideValue {
+	const [theme, setTheme] = useState<ITheme>(defaultTheme);
 
 
 	useEffect(() => {
@@ -51,7 +56,9 @@ function useProvideTheme() {
 	useEffect(() => {
 		const activeThemeJson = JSON.stringify(theme);
 		document.cookie = 'activeThemeJson=' + activeThemeJson + '; path=/; expires=Tue, 19 Jan 2138 03:14:07 GMT'
-		document.body.setAttribute('data-theme', theme?.name);
+		if (theme) {
+			document.body.setAttribute('data-theme', theme.name);
+		}
 	}, [theme])
 
 	function initTheme() {
@@ -68,7 +75,7 @@ function useProvideTheme() {
 		}
 	}
 
-	function keyupHandler(event) {
+	function keyupHandler(event: KeyboardEvent) {
 		for (const i in themes) {
 			if (!themes.hasOwnProperty(i)) continue;
 			if (event.key == themes[i].key && event.altKey) {
